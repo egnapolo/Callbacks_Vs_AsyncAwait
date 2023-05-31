@@ -8,14 +8,24 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject var viewModel: ViewModel = ViewModel()
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+            Text("Hello!")
+            VStack{
+                AsyncImage(url: viewModel.characterBasicInfo.image)
+                Text("Name: \(viewModel.characterBasicInfo.name)")
+                Text("Firs Episode: \(viewModel.characterBasicInfo.firstEpisodeTitle)")
+                Text("Dimension: \(viewModel.characterBasicInfo.dimension)")
+            }.padding(.top, 32)
         }
         .padding()
+        .onAppear {
+            Task{
+                await viewModel.executeRequest()
+            }
+           
+        }
     }
 }
 
